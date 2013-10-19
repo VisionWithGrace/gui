@@ -57,9 +57,9 @@ namespace gui
                 frame_count = 0;
             }
 
-            this.toolStripStatusLabel1.Text = Convert.ToString(frame_count);
+            this.objectDetectedLabel.Text = Convert.ToString(frame_count);
 
-            this.pictureBox1.Image = view_with_boxes;
+            this.mainDisplay.Image = view_with_boxes;
         }
 
         private static Bitmap ColorImageFrameToBitmap(ColorImageFrame colorFrame)
@@ -69,6 +69,7 @@ namespace gui
 
             Bitmap bitmapFrame = new Bitmap(colorFrame.Width, colorFrame.Height,
                 PixelFormat.Format32bppRgb);
+
 
             BitmapData bitmapData = bitmapFrame.LockBits(new Rectangle(0, 0,
                                              colorFrame.Width, colorFrame.Height),
@@ -89,18 +90,19 @@ namespace gui
             selected = 0;
             frame_count = 0;
         }
-        
-        private void buttonRefresh_Click(object sender, EventArgs e)
+
+        private void refreshButton_Click(object sender, EventArgs e)
         {
             rectangles = cv.getBoxes();
         }
 
-        private void buttonSelect_Click(object sender, EventArgs e)
+        private void selectButton_Click(object sender, EventArgs e)
         {
             show_selected_object();
         }
 
         private void show_selected_object()
+
         {
             Bitmap zoomView = new Bitmap(rectangles[selected].Width, rectangles[selected].Height);
             using (var graphics = Graphics.FromImage(zoomView))
@@ -108,7 +110,7 @@ namespace gui
                 graphics.DrawImage(view, new Rectangle(0, 0, zoomView.Width, zoomView.Height), rectangles[selected], GraphicsUnit.Pixel);
             }
 
-            this.pictureBox2.Image = zoomView;
+            this.closeUpDisplay.Image = zoomView;
         }
 
     }
