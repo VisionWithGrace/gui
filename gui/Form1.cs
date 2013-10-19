@@ -42,44 +42,15 @@ namespace gui
                 }
             }
             selected = 0;
-            pictureBox1.Image = boxedView;
+            mainDisplay.Image = boxedView;
         }
 
-        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        private void objectNameText_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Bitmap tempBitmap = new Bitmap(boxedView);
-
-            using (var graphics = Graphics.FromImage(tempBitmap))
-            {
-                    graphics.DrawRectangle(yellowPen, Recs[selected]);
-            }
-
-            pictureBox1.Image = tempBitmap;
-
-
-            zoomView = new Bitmap(Recs[selected].Width, Recs[selected].Height);
-            using (var graphics = Graphics.FromImage(zoomView))
-            {
-                graphics.DrawImage(plainView, new Rectangle(0, 0, zoomView.Width, zoomView.Height), Recs[selected], GraphicsUnit.Pixel);
-            }
-
-            pictureBox2.Image = zoomView;
-
-            selected++;
-            if (selected >= numRecs) selected = 0;
-        }
-
-        private void toolStripStatusLabel2_Click(object sender, EventArgs e)
+        private void objectDetectedLabel_Click(object sender, EventArgs e)
         {
 
         }
@@ -89,17 +60,45 @@ namespace gui
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        // Select Button onClick
+        private void selectButton_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void progressBar1_Click(object sender, EventArgs e)
+        // Scan Button onClick
+        private void scanButton_Click(object sender, EventArgs e)
+        {
+            Bitmap tempBitmap = new Bitmap(boxedView);
+
+            using (var graphics = Graphics.FromImage(tempBitmap))
+            {
+                graphics.DrawRectangle(yellowPen, Recs[selected]);
+            }
+
+            mainDisplay.Image = tempBitmap;
+
+
+            zoomView = new Bitmap(Recs[selected].Width, Recs[selected].Height);
+            using (var graphics = Graphics.FromImage(zoomView))
+            {
+                graphics.DrawImage(plainView, new Rectangle(0, 0, zoomView.Width, zoomView.Height), Recs[selected], GraphicsUnit.Pixel);
+            }
+
+            closeUpDisplay.Image = zoomView;
+
+            selected++;
+            if (selected >= numRecs) selected = 0;
+        }
+
+        // Discard Button onClick
+        private void discardButton_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        // Refresh Button onClick
+        private void refreshButton_Click(object sender, EventArgs e)
         {
             //cv = new ComputerVision();
             //plainView = cv.getImage();
@@ -116,7 +115,7 @@ namespace gui
                 }
             }
             selected = 0;
-            pictureBox1.Image = boxedView;
+            mainDisplay.Image = boxedView;
         }
     }
 }
