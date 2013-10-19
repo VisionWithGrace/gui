@@ -5,69 +5,118 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace gui
 {
     public partial class Form1 : Form
     {
-        Bitmap pic = new Bitmap(550, 300);
-
+        Bitmap plainView;
+        Bitmap boxedView;
+        Bitmap zoomView;
+        Rectangle[] Recs;
+        int numRecs;
+        int selected;
+        ComputerVision cv;
         Pen redPen = new Pen(Color.Red, 3);
         Pen yellowPen = new Pen(Color.Yellow, 5);
-        Rectangle Rec = new Rectangle(30, 40, 50, 60);
-        Rectangle[] Recs;
-        int counter;
-
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            cv = new ComputerVision();
+            plainView = cv.getImage();
+            Recs = cv.getBoxes();
+            numRecs = cv.getnumBoxes();
+
+            boxedView = new Bitmap(plainView);
+
+            using (var graphics = Graphics.FromImage(boxedView))
+            {
+                for (int i = 0; i < numRecs; i++)
+                {
+                    graphics.DrawRectangle(redPen, Recs[i]);
+                }
+            }
+            selected = 0;
+            pictureBox1.Image = boxedView;
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Bitmap tempBitmap = new Bitmap(boxedView);
+
+            using (var graphics = Graphics.FromImage(tempBitmap))
+            {
+                    graphics.DrawRectangle(yellowPen, Recs[selected]);
+            }
+
+            pictureBox1.Image = tempBitmap;
+
+
+            zoomView = new Bitmap(Recs[selected].Width, Recs[selected].Height);
+            using (var graphics = Graphics.FromImage(zoomView))
+            {
+                graphics.DrawImage(plainView, new Rectangle(0, 0, zoomView.Width, zoomView.Height), Recs[selected], GraphicsUnit.Pixel);
+            }
+
+            pictureBox2.Image = zoomView;
+
+            selected++;
+            if (selected >= numRecs) selected = 0;
+        }
+
+        private void toolStripStatusLabel2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void progressBar1_Click(object sender, EventArgs e)
+        {
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Bitmap temp = new Bitmap(pic);
-            using (var graphics = Graphics.FromImage(temp))
-            {
-                graphics.DrawRectangle(yellowPen, Recs[counter]);
-            }
-            pictureBox1.Image = temp;
-            counter++;
-            if (counter >= 3) counter = 0;
-        }
+            //cv = new ComputerVision();
+            //plainView = cv.getImage();
+            Recs = cv.getBoxes();
+            numRecs = cv.getnumBoxes();
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            using (var newGraphics = Graphics.FromImage(pic))
+            boxedView = new Bitmap(plainView);
+
+            using (var graphics = Graphics.FromImage(boxedView))
             {
-                newGraphics.FillRectangle(new SolidBrush(Color.Orange), 0, 0, 550, 300);
-            }
-            pictureBox1.Image = pic;
-            Recs = new Rectangle[3];
-            Recs[0] = new Rectangle(30, 40, 50, 60);
-            Recs[1] = new Rectangle(200, 80, 100, 60);
-            Recs[2] = new Rectangle(400, 40, 50, 30);
-            using (var graphics = Graphics.FromImage(pic))
-            {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < numRecs; i++)
                 {
                     graphics.DrawRectangle(redPen, Recs[i]);
                 }
             }
-            pictureBox1.Image = pic;
-            counter = 0;
+            selected = 0;
+            pictureBox1.Image = boxedView;
         }
     }
 }
