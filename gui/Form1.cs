@@ -6,117 +6,110 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Kinect;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace gui
 {
     public partial class Form1 : Form
     {
-        Bitmap plainView;
-        Bitmap boxedView;
-        Bitmap zoomView;
-        Rectangle[] Recs;
-        int numRecs;
+        Bitmap view;
+        Rectangle[] rectangles;
         int selected;
+        int frame_count;
         ComputerVision cv;
         Pen redPen = new Pen(Color.Red, 3);
         Pen yellowPen = new Pen(Color.Yellow, 5);
+
         public Form1()
         {
             InitializeComponent();
         }
 
+        public void ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
+        {
+            frame_count++;
+
+            ColorImageFrame colorFrame = e.OpenColorImageFrame();
+            if (colorFrame == null)
+            {
+                return;
+            }
+            view = ColorImageFrameToBitmap(colorFrame);
+            Bitmap view_with_boxes = new Bitmap(view);
+
+            // Add boxes
+            using (var graphics = Graphics.FromImage(view_with_boxes))
+            {
+                for (int i = 0; i < rectangles.Length; i++)
+                {
+                    if (i == selected)
+                        graphics.DrawRectangle(yellowPen, rectangles[i]);
+                    else
+                        graphics.DrawRectangle(redPen, rectangles[i]);
+                }
+            }
+
+            if (frame_count > 50)
+            {
+                selected = (selected + 1) % rectangles.Length;
+                frame_count = 0;
+            }
+
+            this.toolStripStatusLabel1.Text = Convert.ToString(frame_count);
+
+            this.pictureBox1.Image = view_with_boxes;
+        }
+
+        private static Bitmap ColorImageFrameToBitmap(ColorImageFrame colorFrame)
+        {
+            byte[] pixelBuffer = new byte[colorFrame.PixelDataLength];
+            colorFrame.CopyPixelDataTo(pixelBuffer);
+
+            Bitmap bitmapFrame = new Bitmap(colorFrame.Width, colorFrame.Height,
+                PixelFormat.Format32bppRgb);
+
+            BitmapData bitmapData = bitmapFrame.LockBits(new Rectangle(0, 0,
+                                             colorFrame.Width, colorFrame.Height),
+            ImageLockMode.WriteOnly, bitmapFrame.PixelFormat);
+
+            IntPtr intPointer = bitmapData.Scan0;
+            Marshal.Copy(pixelBuffer, 0, intPointer, colorFrame.PixelDataLength);
+
+            bitmapFrame.UnlockBits(bitmapData);
+            return bitmapFrame;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             cv = new ComputerVision();
-            plainView = cv.getImage();
-            Recs = cv.getBoxes();
-            numRecs = cv.getnumBoxes();
-
-            boxedView = new Bitmap(plainView);
-
-            using (var graphics = Graphics.FromImage(boxedView))
-            {
-                for (int i = 0; i < numRecs; i++)
-                {
-                    graphics.DrawRectangle(redPen, Recs[i]);
-                }
-            }
+            cv.set_handler(new EventHandler<ColorImageFrameReadyEventArgs>(this.ColorFrameReady));
+            rectangles = cv.getBoxes();
             selected = 0;
-            pictureBox1.Image = boxedView;
+            frame_count = 0;
+        }
+        
+        private void buttonRefresh_Click(object sender, EventArgs e)
+        {
+            rectangles = cv.getBoxes();
         }
 
-        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        private void buttonSelect_Click(object sender, EventArgs e)
         {
-
+            show_selected_object();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void show_selected_object()
         {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Bitmap tempBitmap = new Bitmap(boxedView);
-
-            using (var graphics = Graphics.FromImage(tempBitmap))
-            {
-                    graphics.DrawRectangle(yellowPen, Recs[selected]);
-            }
-
-            pictureBox1.Image = tempBitmap;
-
-
-            zoomView = new Bitmap(Recs[selected].Width, Recs[selected].Height);
+            Bitmap zoomView = new Bitmap(rectangles[selected].Width, rectangles[selected].Height);
             using (var graphics = Graphics.FromImage(zoomView))
             {
-                graphics.DrawImage(plainView, new Rectangle(0, 0, zoomView.Width, zoomView.Height), Recs[selected], GraphicsUnit.Pixel);
+                graphics.DrawImage(view, new Rectangle(0, 0, zoomView.Width, zoomView.Height), rectangles[selected], GraphicsUnit.Pixel);
             }
 
-            pictureBox2.Image = zoomView;
-
-            selected++;
-            if (selected >= numRecs) selected = 0;
+            this.pictureBox2.Image = zoomView;
         }
 
-        private void toolStripStatusLabel2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void progressBar1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //cv = new ComputerVision();
-            //plainView = cv.getImage();
-            Recs = cv.getBoxes();
-            numRecs = cv.getnumBoxes();
-
-            boxedView = new Bitmap(plainView);
-
-            using (var graphics = Graphics.FromImage(boxedView))
-            {
-                for (int i = 0; i < numRecs; i++)
-                {
-                    graphics.DrawRectangle(redPen, Recs[i]);
-                }
-            }
-            selected = 0;
-            pictureBox1.Image = boxedView;
-        }
     }
 }

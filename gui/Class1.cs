@@ -4,47 +4,43 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using Microsoft.Kinect;
 
 namespace gui
 {
     class ComputerVision
     {
-        private OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
+        KinectSensor sensor = KinectSensor.KinectSensors.First();
         Bitmap kinectView;
-        Rectangle[] Recs;
-        int numRecs;
+        Rectangle[] objects;
         public ComputerVision()
         {
+            sensor.Start();
         }
-        public Bitmap getImage()
+
+        public void set_handler(EventHandler<ColorImageFrameReadyEventArgs> handler)
         {
-            openFileDialog1.FileName = "openFileDialog1";
-            openFileDialog1.Title = "Select a picture file";
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                kinectView = new Bitmap(openFileDialog1.FileName);
-            }
-            return kinectView;
+            sensor.ColorStream.Enable();
+            sensor.ColorFrameReady += handler;
         }
+
         public Rectangle[] getBoxes()
         {
-            Random tempRand = new Random(new Random().Next());
-            numRecs = (tempRand.Next() % 4) + 2;
-            Recs = new Rectangle[numRecs];
-            int width = kinectView.Width;
-            int height = kinectView.Height;
+            Random rand = new Random();
+            int num_objects = (rand.Next() % 4) + 2;
+            objects = new Rectangle[num_objects];
+            int max_width = sensor.ColorStream.FrameWidth;
+            int max_height = sensor.ColorStream.FrameHeight;
             int x, y, z, w;
-            for (int i = 0; i < numRecs; i++)
+            for (int i = 0; i < num_objects; i++)
             {
-                x = tempRand.Next() % (width - 160);
-                y = tempRand.Next() % (height - 160);
-                z = (tempRand.Next() % 120) + 40;
-                w = (tempRand.Next() % 120) + 40;
-                Recs[i] = new Rectangle(x, y, z, w);
+                x = rand.Next() % (max_width - 160);
+                y = rand.Next() % (max_height - 160);
+                z = (rand.Next() % 120) + 40;
+                w = (rand.Next() % 120) + 40;
+                objects[i] = new Rectangle(x, y, z, w);
             }
-            return Recs;
+            return objects;
         }
-        public int getnumBoxes() { return numRecs; }
     }
 }
