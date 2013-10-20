@@ -135,7 +135,7 @@ namespace gui
         // Rotate and highlight the rectangles, also display the cropped image in the closeupView
         private void scanButton_Click_1(object sender, EventArgs e)
         {
-            Bitmap tempBitmap = new Bitmap(plainView);
+            Bitmap tempBitmap = new Bitmap(boxedView);
 
             // Highlight rectangle in yellow
             using (var graphics = Graphics.FromImage(tempBitmap))
