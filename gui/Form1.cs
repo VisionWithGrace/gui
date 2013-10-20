@@ -14,7 +14,6 @@ namespace gui
 {
     public partial class Form1 : Form
     {
-        Bitmap view;
         Bitmap plainView;
         Bitmap boxedView;
         Rectangle[] rectangles;
@@ -38,11 +37,11 @@ namespace gui
             {
                 return;
             }
-            view = ColorImageFrameToBitmap(colorFrame);
-            Bitmap view_with_boxes = new Bitmap(view);
+            plainView = ColorImageFrameToBitmap(colorFrame);
+            boxedView = new Bitmap(plainView);
 
             // Add boxes
-            using (var graphics = Graphics.FromImage(view_with_boxes))
+            using (var graphics = Graphics.FromImage(boxedView))
             {
                 for (int i = 0; i < rectangles.Length; i++)
                 {
@@ -61,7 +60,7 @@ namespace gui
 
             this.objectDetectedLabel.Text = Convert.ToString(frame_count);
 
-            this.mainDisplay.Image = view_with_boxes;
+            this.mainDisplay.Image = boxedView;
         }
 
         private static Bitmap ColorImageFrameToBitmap(ColorImageFrame colorFrame)
@@ -88,6 +87,7 @@ namespace gui
         private void Form1_Load(object sender, EventArgs e)
         {
             cv = new ComputerVision();
+            rectangles = cv.getBoxes();
 
             // Set kinect handler
             if (cv.kinectFlag)
@@ -100,7 +100,6 @@ namespace gui
             {
                 plainView = cv.getImage();
                 boxedView = new Bitmap(plainView);
-                rectangles = cv.getBoxes();
                 drawRectangles();
                 mainDisplay.Image = boxedView;
             }
@@ -122,7 +121,7 @@ namespace gui
 
                 using (var graphics = Graphics.FromImage(zoomView))
                 {
-                    graphics.DrawImage(view, new Rectangle(0, 0, zoomView.Width, zoomView.Height), rectangles[selected], GraphicsUnit.Pixel);
+                    graphics.DrawImage(plainView, new Rectangle(0, 0, zoomView.Width, zoomView.Height), rectangles[selected], GraphicsUnit.Pixel);
                 }
 
                 this.closeUpDisplay.Image = zoomView;
@@ -136,7 +135,7 @@ namespace gui
         // Rotate and highlight the rectangles, also display the cropped image in the closeupView
         private void scanButton_Click_1(object sender, EventArgs e)
         {
-            Bitmap tempBitmap = new Bitmap(boxedView);
+            Bitmap tempBitmap = new Bitmap(plainView);
 
             // Highlight rectangle in yellow
             using (var graphics = Graphics.FromImage(tempBitmap))

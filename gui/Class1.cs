@@ -40,6 +40,8 @@ namespace gui
 
         public void set_handler(EventHandler<ColorImageFrameReadyEventArgs> handler)
         {
+            if (!kinectFlag)
+                return;
             sensor.ColorStream.Enable();
             sensor.ColorFrameReady += handler;
         }
