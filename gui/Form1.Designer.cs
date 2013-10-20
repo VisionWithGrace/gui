@@ -162,7 +162,7 @@
             this.statusStrip1.Size = new System.Drawing.Size(1062, 42);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
-            // s
+            // 
             // objectDetectedLabel
             // 
             this.objectDetectedLabel.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -229,6 +229,7 @@
             this.scanButton.TabIndex = 5;
             this.scanButton.Text = "Scan";
             this.scanButton.UseVisualStyleBackColor = false;
+            this.scanButton.Click += new System.EventHandler(this.scanButton_Click_1);
             // 
             // selectButton
             // 

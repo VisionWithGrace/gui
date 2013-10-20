@@ -10,12 +10,32 @@ namespace gui
 {
     class ComputerVision
     {
-        KinectSensor sensor = KinectSensor.KinectSensors.First();
+        KinectSensor sensor;
         Bitmap kinectView;
         Rectangle[] objects;
+        public bool kinectFlag;
+        public int num_objects;
         public ComputerVision()
         {
-            sensor.Start();
+            // Start kinect sensor
+            try
+            {
+                sensor = KinectSensor.KinectSensors.First();
+                sensor.Start();
+                kinectFlag = true;
+            }
+            // Open file dialog if no kinect is found
+            catch
+            {
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                openFileDialog1.FileName = "openFileDialog1";
+                openFileDialog1.Title = "Select a picture file";
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    kinectView = new Bitmap(openFileDialog1.FileName);
+                }
+                kinectFlag = false;
+            }
         }
 
         public void set_handler(EventHandler<ColorImageFrameReadyEventArgs> handler)
@@ -24,14 +44,29 @@ namespace gui
             sensor.ColorFrameReady += handler;
         }
 
+        // Draw Rectangles at random locations
+        // Need to receive x,y coordinates from Kinect
         public Rectangle[] getBoxes()
         {
             Random rand = new Random();
-            int num_objects = (rand.Next() % 4) + 2;
+            num_objects = (rand.Next() % 4) + 2;
             objects = new Rectangle[num_objects];
-            int max_width = sensor.ColorStream.FrameWidth;
-            int max_height = sensor.ColorStream.FrameHeight;
             int x, y, z, w;
+            int max_width;
+            int max_height;
+
+            // Get sensor frame size if kinect is present
+            if (kinectFlag)
+            {
+                max_width = sensor.ColorStream.FrameWidth;
+                max_height = sensor.ColorStream.FrameHeight;
+            }
+            // Set frame size to be size of mockup image
+            else
+            {
+                max_width = kinectView.Width;
+                max_height = kinectView.Height;
+            }
             for (int i = 0; i < num_objects; i++)
             {
                 x = rand.Next() % (max_width - 160);
@@ -41,6 +76,11 @@ namespace gui
                 objects[i] = new Rectangle(x, y, z, w);
             }
             return objects;
+        }
+
+        public Bitmap getImage()
+        {
+            return kinectView;
         }
     }
 }

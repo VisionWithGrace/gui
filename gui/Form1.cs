@@ -15,6 +15,8 @@ namespace gui
     public partial class Form1 : Form
     {
         Bitmap view;
+        Bitmap plainView;
+        Bitmap boxedView;
         Rectangle[] rectangles;
         int selected;
         int frame_count;
@@ -70,7 +72,6 @@ namespace gui
             Bitmap bitmapFrame = new Bitmap(colorFrame.Width, colorFrame.Height,
                 PixelFormat.Format32bppRgb);
 
-
             BitmapData bitmapData = bitmapFrame.LockBits(new Rectangle(0, 0,
                                              colorFrame.Width, colorFrame.Height),
             ImageLockMode.WriteOnly, bitmapFrame.PixelFormat);
@@ -82,18 +83,28 @@ namespace gui
             return bitmapFrame;
         }
 
+        // Initialize Computer Vision and Kinect upon Load
+        // Draw mockup GUI if no kinect is found
         private void Form1_Load(object sender, EventArgs e)
         {
             cv = new ComputerVision();
-            cv.set_handler(new EventHandler<ColorImageFrameReadyEventArgs>(this.ColorFrameReady));
-            rectangles = cv.getBoxes();
-            selected = 0;
-            frame_count = 0;
-        }
 
-        private void refreshButton_Click(object sender, EventArgs e)
-        {
-            rectangles = cv.getBoxes();
+            // Set kinect handler
+            if (cv.kinectFlag)
+            {
+                cv.set_handler(new EventHandler<ColorImageFrameReadyEventArgs>(this.ColorFrameReady));
+            }
+
+            // Draw imported image if no kinect is found
+            else
+            {
+                plainView = cv.getImage();
+                boxedView = new Bitmap(plainView);
+                rectangles = cv.getBoxes();
+                drawRectangles();
+                mainDisplay.Image = boxedView;
+            }
+            frame_count = 0;
         }
 
         private void selectButton_Click(object sender, EventArgs e)
@@ -101,17 +112,71 @@ namespace gui
             show_selected_object();
         }
 
+        // Display selected object in closeUpDisplay
+        // DOESN'T WORK WITHOUT KINECT
         private void show_selected_object()
-
         {
+            try
+            {
+                Bitmap zoomView = new Bitmap(rectangles[selected].Width, rectangles[selected].Height);
+
+                using (var graphics = Graphics.FromImage(zoomView))
+                {
+                    graphics.DrawImage(view, new Rectangle(0, 0, zoomView.Width, zoomView.Height), rectangles[selected], GraphicsUnit.Pixel);
+                }
+
+                this.closeUpDisplay.Image = zoomView;
+            }
+            catch (Exception e)
+            {
+                // Do something
+            }
+        }
+
+        // Rotate and highlight the rectangles, also display the cropped image in the closeupView
+        private void scanButton_Click_1(object sender, EventArgs e)
+        {
+            Bitmap tempBitmap = new Bitmap(boxedView);
+
+            // Highlight rectangle in yellow
+            using (var graphics = Graphics.FromImage(tempBitmap))
+            {
+                graphics.DrawRectangle(yellowPen, rectangles[selected]);
+            }
+
+            mainDisplay.Image = tempBitmap;
+
+            // Draw cropped image in closeupView
             Bitmap zoomView = new Bitmap(rectangles[selected].Width, rectangles[selected].Height);
             using (var graphics = Graphics.FromImage(zoomView))
             {
-                graphics.DrawImage(view, new Rectangle(0, 0, zoomView.Width, zoomView.Height), rectangles[selected], GraphicsUnit.Pixel);
+                graphics.DrawImage(plainView, new Rectangle(0, 0, zoomView.Width, zoomView.Height), rectangles[selected], GraphicsUnit.Pixel);
             }
+            closeUpDisplay.Image = zoomView;
 
-            this.closeUpDisplay.Image = zoomView;
+            selected++;
+            if (selected >= cv.num_objects) selected = 0;
         }
 
+        // Re-generate rectangles
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            rectangles = cv.getBoxes();
+            boxedView = new Bitmap(plainView);
+            drawRectangles();
+            mainDisplay.Image = boxedView;
+        }
+
+        private void drawRectangles()
+        {
+            using (var graphics = Graphics.FromImage(boxedView))
+            {
+                for (int i = 0; i < cv.num_objects; i++)
+                {
+                    graphics.DrawRectangle(redPen, rectangles[i]);
+                }
+            }
+            selected = 0;
+        }
     }
 }
