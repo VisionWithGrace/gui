@@ -192,6 +192,7 @@ namespace gui
         private void Form1_Shown(object sender, EventArgs e)
         {
             this.mainDisplay.Focus();
+            this.menuStrip1.Hide();
         }
 
         private void objectNameText_Enter(object sender, EventArgs e)
