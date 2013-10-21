@@ -58,7 +58,7 @@ namespace gui
                 frame_count = 0;
             }
 
-            this.objectDetectedLabel.Text = Convert.ToString(frame_count);
+            //this.objectDetectedLabel.Text = Convert.ToString(frame_count);
 
             this.mainDisplay.Image = boxedView;
         }
@@ -88,6 +88,7 @@ namespace gui
         {
             cv = new ComputerVision();
             rectangles = cv.getBoxes();
+            this.objectDetectedLabel.Text = rectangles.Length.ToString() + " objects detected";
 
             // Set kinect handler
             if (cv.kinectFlag)
@@ -161,6 +162,7 @@ namespace gui
         private void refreshButton_Click(object sender, EventArgs e)
         {
             rectangles = cv.getBoxes();
+            this.objectDetectedLabel.Text = rectangles.Length.ToString() + " objects detected";
             boxedView = new Bitmap(plainView);
             drawRectangles();
             mainDisplay.Image = boxedView;
