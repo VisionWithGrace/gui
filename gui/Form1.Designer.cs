@@ -85,7 +85,10 @@
             this.objectNameText.Name = "objectNameText";
             this.objectNameText.Size = new System.Drawing.Size(168, 26);
             this.objectNameText.TabIndex = 6;
-            this.objectNameText.Text = "Cube";
+            this.objectNameText.Text = "Enter object name...";
+            this.objectNameText.Enter += new System.EventHandler(this.objectNameText_Enter);
+            this.objectNameText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.objectNameText_KeyDown);
+            this.objectNameText.Leave += new System.EventHandler(this.objectNameText_Leave);
             // 
             // mainDisplay
             // 

@@ -191,5 +191,21 @@ namespace gui
         {
             this.mainDisplay.Focus();
         }
+
+        private void objectNameText_Enter(object sender, EventArgs e)
+        {
+            this.objectNameText.Text = "";
+        }
+
+        private void objectNameText_Leave(object sender, EventArgs e)
+        {
+            this.objectNameText.Text = "Enter object name...";
+        }
+
+        private void objectNameText_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                this.objectNameText.Text = "";
+        }
     }
 }
