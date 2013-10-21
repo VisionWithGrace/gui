@@ -40,7 +40,7 @@
             this.objectDetectedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.leftButtonMenuLayout = new System.Windows.Forms.TableLayoutPanel();
             this.refreshButton = new System.Windows.Forms.Button();
-            this.discardButton = new System.Windows.Forms.Button();
+            this.undoButton = new System.Windows.Forms.Button();
             this.scanButton = new System.Windows.Forms.Button();
             this.selectButton = new System.Windows.Forms.Button();
             this.mainDisplayLayout.SuspendLayout();
@@ -179,7 +179,7 @@
             this.leftButtonMenuLayout.ColumnCount = 1;
             this.leftButtonMenuLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.leftButtonMenuLayout.Controls.Add(this.refreshButton, 0, 3);
-            this.leftButtonMenuLayout.Controls.Add(this.discardButton, 0, 2);
+            this.leftButtonMenuLayout.Controls.Add(this.undoButton, 0, 2);
             this.leftButtonMenuLayout.Controls.Add(this.scanButton, 0, 1);
             this.leftButtonMenuLayout.Controls.Add(this.selectButton, 0, 0);
             this.leftButtonMenuLayout.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -213,15 +213,15 @@
             // 
             // discardButton
             // 
-            this.discardButton.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.discardButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.discardButton.Enabled = false;
-            this.discardButton.Location = new System.Drawing.Point(13, 155);
-            this.discardButton.Name = "discardButton";
-            this.discardButton.Size = new System.Drawing.Size(142, 65);
-            this.discardButton.TabIndex = 4;
-            this.discardButton.Text = "Discard";
-            this.discardButton.UseVisualStyleBackColor = false;
+            this.undoButton.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.undoButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.undoButton.Enabled = false;
+            this.undoButton.Location = new System.Drawing.Point(13, 155);
+            this.undoButton.Name = "undoButton";
+            this.undoButton.Size = new System.Drawing.Size(142, 65);
+            this.undoButton.TabIndex = 4;
+            this.undoButton.Text = "Undo";
+            this.undoButton.UseVisualStyleBackColor = false;
             // 
             // scanButton
             // 
@@ -286,7 +286,7 @@
         private System.Windows.Forms.Button refreshButton;
         private System.Windows.Forms.TextBox objectNameText;
         private System.Windows.Forms.TableLayoutPanel leftButtonMenuLayout;
-        private System.Windows.Forms.Button discardButton;
+        private System.Windows.Forms.Button undoButton;
         private System.Windows.Forms.Button scanButton;
         private System.Windows.Forms.Button selectButton;
         private System.Windows.Forms.MenuStrip menuStrip1;
