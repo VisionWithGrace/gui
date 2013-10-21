@@ -212,6 +212,7 @@
             // 
             this.discardButton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.discardButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.discardButton.Enabled = false;
             this.discardButton.Location = new System.Drawing.Point(13, 155);
             this.discardButton.Name = "discardButton";
             this.discardButton.Size = new System.Drawing.Size(142, 65);
@@ -249,11 +250,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1062, 576);
             this.Controls.Add(this.mainDisplayLayout);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "Form1";
             this.Text = "Vision With Grace";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Shown += new System.EventHandler(this.Form1_Shown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.CheckSelect);
             this.mainDisplayLayout.ResumeLayout(false);
             this.mainDisplayLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainDisplay)).EndInit();

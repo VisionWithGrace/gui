@@ -177,5 +177,19 @@ namespace gui
             }
             selected = 0;
         }
+
+        private void CheckSelect(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                show_selected_object();
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            this.mainDisplay.Focus();
+        }
     }
 }
