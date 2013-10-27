@@ -110,7 +110,6 @@ namespace gui
         private void selectButton_Click(object sender, EventArgs e)
         {
             show_selected_object();
-            new Form().Show();
         }
 
         // Display selected object in closeUpDisplay
@@ -193,7 +192,6 @@ namespace gui
         private void Form1_Shown(object sender, EventArgs e)
         {
             this.mainDisplay.Focus();
-            //this.menuStrip1.Hide();
         }
 
         private void objectNameText_Enter(object sender, EventArgs e)
@@ -217,7 +215,6 @@ namespace gui
         {
             AdminPanel adminPanel = new AdminPanel();
             adminPanel.Show();
-            
         }
     }
 }
