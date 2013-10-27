@@ -36,6 +36,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.adminPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.objectDetectedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.leftButtonMenuLayout = new System.Windows.Forms.TableLayoutPanel();
@@ -149,10 +150,19 @@
             // 
             // adminToolStripMenuItem
             // 
+            this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.adminPanelToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.adminToolStripMenuItem.Text = "Admin";
+            // 
+            // adminPanelToolStripMenuItem
+            // 
+            this.adminPanelToolStripMenuItem.Name = "adminPanelToolStripMenuItem";
+            this.adminPanelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.adminPanelToolStripMenuItem.Text = "Admin Panel";
+            this.adminPanelToolStripMenuItem.Click += new System.EventHandler(this.adminPanelToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -211,7 +221,7 @@
             this.refreshButton.UseVisualStyleBackColor = false;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
-            // discardButton
+            // undoButton
             // 
             this.undoButton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.undoButton.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -293,6 +303,7 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem adminPanelToolStripMenuItem;
     }
 }
 
