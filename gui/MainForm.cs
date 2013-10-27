@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 
 namespace gui
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         Bitmap plainView;
         Bitmap boxedView;
@@ -23,7 +23,7 @@ namespace gui
         Pen redPen = new Pen(Color.Red, 3);
         Pen yellowPen = new Pen(Color.Yellow, 5);
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
