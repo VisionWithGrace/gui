@@ -69,7 +69,6 @@
             this.allObjectsButton.TabIndex = 2;
             this.allObjectsButton.Text = "Get All Objects";
             this.allObjectsButton.UseVisualStyleBackColor = true;
-            this.allObjectsButton.Click += new System.EventHandler(this.button2_Click);
             // 
             // AdminPanel
             // 
