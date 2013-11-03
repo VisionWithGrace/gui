@@ -13,7 +13,7 @@ namespace gui
         KinectSensor sensor;
         Bitmap kinectView;
         Rectangle[] objects;
-        public bool kinectFlag;
+        public bool isUsingKinect;
         public int num_objects;
         public ComputerVision()
         {
@@ -22,7 +22,7 @@ namespace gui
             {
                 sensor = KinectSensor.KinectSensors.First();
                 sensor.Start();
-                kinectFlag = true;
+                isUsingKinect = true;
             }
             // Open file dialog if no kinect is found
             catch
@@ -38,13 +38,13 @@ namespace gui
                 {
                     kinectView = new Bitmap(400, 400);
                 }   
-                kinectFlag = false;
+                isUsingKinect = false;
             }
         }
 
         public void set_handler(EventHandler<ColorImageFrameReadyEventArgs> handler)
         {
-            if (!kinectFlag)
+            if (!isUsingKinect)
                 return;
             sensor.ColorStream.Enable();
             sensor.ColorFrameReady += handler;
@@ -62,7 +62,7 @@ namespace gui
             int max_height;
 
             // Get sensor frame size if kinect is present
-            if (kinectFlag)
+            if (isUsingKinect)
             {
                 max_width = sensor.ColorStream.FrameWidth;
                 max_height = sensor.ColorStream.FrameHeight;

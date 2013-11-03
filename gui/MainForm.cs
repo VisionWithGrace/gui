@@ -39,7 +39,7 @@ namespace gui
             this.objectDetectedLabel.Text = rectangles.Length.ToString() + " objects detected";
 
             // Set kinect handler
-            if (cv.kinectFlag)
+            if (cv.isUsingKinect)
             {
                 cv.set_handler(new EventHandler<ColorImageFrameReadyEventArgs>(this.ColorFrameReady));
             }
