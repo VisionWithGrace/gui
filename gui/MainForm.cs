@@ -23,6 +23,8 @@ namespace gui
         Pen redPen = new Pen(Color.Red, 3);
         Pen yellowPen = new Pen(Color.Yellow, 5);
 
+        bool isScanning;
+
         public MainForm()
         {
             InitializeComponent();
@@ -34,37 +36,56 @@ namespace gui
         private void Form1_Shown(object sender, EventArgs e)
         {
             this.mainDisplay.Focus();
+            
+            // Start CV and set handler
             cv = new ComputerVision();
+
+            // Get first set of boxes
             rectangles = cv.getBoxes();
             this.objectDetectedLabel.Text = rectangles.Length.ToString() + " objects detected";
 
             // Set kinect handler
             if (cv.isUsingKinect)
             {
-                cv.set_handler(new EventHandler<ColorImageFrameReadyEventArgs>(this.ColorFrameReady));
+                cv.set_handler(new EventHandler<ColorImageFrameReadyEventArgs>(this.colorFrameReady));
             }
-
-            // Draw imported image if no kinect is found
             else
             {
-                plainView = cv.getImage();
-                boxedView = new Bitmap(plainView);
-                drawRectangles();
-                mainDisplay.Image = boxedView;
+                cv.set_handler(new EventHandler(this.colorFrameReady));
             }
             frame_count = 0;
+            isScanning = false;
         }
 
-        public void ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
+        public void colorFrameReady(object sender, EventArgs e)
         {
-            frame_count++;
-
+            processFrame(cv.getSimulationImage());
+        }
+        public void colorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
+        {
             ColorImageFrame colorFrame = e.OpenColorImageFrame();
             if (colorFrame == null)
             {
                 return;
             }
-            plainView = ColorImageFrameToBitmap(colorFrame);
+            processFrame(ColorImageFrameToBitmap(colorFrame));
+        }
+
+        private void processFrame(Bitmap bitmap)
+        {
+            // delete previous values
+            if (plainView != null)
+                plainView.Dispose();
+            if (boxedView != null)
+                boxedView.Dispose();
+
+            // Track number of frames if currently scanning
+            if (isScanning)
+                frame_count++;
+            else
+                frame_count = 0;
+
+            plainView = new Bitmap(bitmap);
             boxedView = new Bitmap(plainView);
 
             // Add boxes
@@ -85,11 +106,12 @@ namespace gui
                 frame_count = 0;
             }
 
-            //this.objectDetectedLabel.Text = Convert.ToString(frame_count);
+            this.labelTimeRemaining.Text = Convert.ToString(frame_count);
 
             this.mainDisplay.Image = boxedView;
         }
 
+        // Don't touch this function, I didn't write it. It came from the interwebs.
         private static Bitmap ColorImageFrameToBitmap(ColorImageFrame colorFrame)
         {
             byte[] pixelBuffer = new byte[colorFrame.PixelDataLength];
@@ -115,7 +137,6 @@ namespace gui
         }
 
         // Display selected object in closeUpDisplay
-        // DOESN'T WORK WITHOUT KINECT
         private void show_selected_object()
         {
             try
@@ -182,13 +203,20 @@ namespace gui
             selected = 0;
         }
 
-        private void CheckSelect(object sender, KeyEventArgs e)
+        private void startScanning(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Space)
-            {
-                show_selected_object();
-                e.SuppressKeyPress = true;
-            }
+            if (e.KeyCode != Keys.Space)
+                return;
+            e.SuppressKeyPress = true;
+            isScanning = true;
+        }
+        private void stopScanning(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Space)
+                return;
+            e.SuppressKeyPress = true;
+            isScanning = false;
+            show_selected_object();
         }
 
         private void objectNameText_Enter(object sender, EventArgs e)

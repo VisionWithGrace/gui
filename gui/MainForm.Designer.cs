@@ -44,6 +44,7 @@
             this.undoButton = new System.Windows.Forms.Button();
             this.scanButton = new System.Windows.Forms.Button();
             this.selectButton = new System.Windows.Forms.Button();
+            this.labelTimeRemaining = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainDisplayLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.closeUpDisplay)).BeginInit();
@@ -168,7 +169,8 @@
             // 
             this.mainDisplayLayout.SetColumnSpan(this.statusStrip1, 2);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.objectDetectedLabel});
+            this.objectDetectedLabel,
+            this.labelTimeRemaining});
             this.statusStrip1.Location = new System.Drawing.Point(0, 534);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -257,6 +259,11 @@
             this.selectButton.UseVisualStyleBackColor = false;
             this.selectButton.Click += new System.EventHandler(this.selectButton_Click);
             // 
+            // labelTimeRemaining
+            // 
+            this.labelTimeRemaining.Name = "labelTimeRemaining";
+            this.labelTimeRemaining.Size = new System.Drawing.Size(0, 37);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -270,7 +277,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Vision With Grace";
             this.Shown += new System.EventHandler(this.Form1_Shown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.CheckSelect);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.startScanning);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.stopScanning);
             this.mainDisplayLayout.ResumeLayout(false);
             this.mainDisplayLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainDisplay)).EndInit();
@@ -304,6 +312,7 @@
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem adminPanelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel labelTimeRemaining;
     }
 }
 

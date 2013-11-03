@@ -11,9 +11,10 @@ namespace gui
     class ComputerVision
     {
         KinectSensor sensor;
-        Bitmap kinectView;
+        private Bitmap simulationImage;
         Rectangle[] objects;
         public bool isUsingKinect;
+        Timer timer = new Timer();
         public int num_objects;
         public ComputerVision()
         {
@@ -21,33 +22,46 @@ namespace gui
             try
             {
                 sensor = KinectSensor.KinectSensors.First();
-                sensor.Start();
                 isUsingKinect = true;
             }
             // Open file dialog if no kinect is found
             catch
             {
-                OpenFileDialog openFileDialog1 = new OpenFileDialog();
-                openFileDialog1.FileName = "openFileDialog1";
-                openFileDialog1.Title = "Select a picture file";
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                isUsingKinect = false;
+
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Title = "Select a picture file";
+                if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    kinectView = new Bitmap(openFileDialog1.FileName);
+                    simulationImage = new Bitmap(ofd.FileName);
                 }
                 else
                 {
-                    kinectView = new Bitmap(400, 400);
-                }   
-                isUsingKinect = false;
+                    simulationImage = new Bitmap(400, 400);
+                }
+
+                // Initialize timer to simulate Kinect frames
+                // 33 ms ~= 1/30 sec ~= 30 FPS
+                timer.Interval = 33;
             }
         }
 
+        public void set_handler(EventHandler handler)
+        {
+            if (isUsingKinect)
+                throw new InvalidOperationException();
+
+            timer.Tick += handler;
+            timer.Start();
+        }
         public void set_handler(EventHandler<ColorImageFrameReadyEventArgs> handler)
         {
             if (!isUsingKinect)
-                return;
-            sensor.ColorStream.Enable();
+                throw new InvalidOperationException();
+
             sensor.ColorFrameReady += handler;
+            sensor.Start();
+            sensor.ColorStream.Enable();
         }
 
         // Draw Rectangles at random locations
@@ -61,18 +75,19 @@ namespace gui
             int max_width;
             int max_height;
 
-            // Get sensor frame size if kinect is present
+            // Get image height and width
             if (isUsingKinect)
             {
                 max_width = sensor.ColorStream.FrameWidth;
                 max_height = sensor.ColorStream.FrameHeight;
             }
-            // Set frame size to be size of mockup image
             else
             {
-                max_width = kinectView.Width;
-                max_height = kinectView.Height;
+                max_width = simulationImage.Width;
+                max_height = simulationImage.Height;
             }
+
+            // Create N randomly sized and located rectangles
             for (int i = 0; i < num_objects; i++)
             {
                 x = rand.Next() % (max_width - 160);
@@ -81,12 +96,13 @@ namespace gui
                 w = (rand.Next() % 120) + 40;
                 objects[i] = new Rectangle(x, y, z, w);
             }
+
             return objects;
         }
 
-        public Bitmap getImage()
+        public Bitmap getSimulationImage()
         {
-            return kinectView;
+            return simulationImage;
         }
     }
 }
