@@ -28,6 +28,33 @@ namespace gui
             InitializeComponent();
         }
 
+
+        // Initialize Computer Vision and Kinect upon Load
+        // Draw mockup GUI if no kinect is found
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            this.mainDisplay.Focus();
+            cv = new ComputerVision();
+            rectangles = cv.getBoxes();
+            this.objectDetectedLabel.Text = rectangles.Length.ToString() + " objects detected";
+
+            // Set kinect handler
+            if (cv.kinectFlag)
+            {
+                cv.set_handler(new EventHandler<ColorImageFrameReadyEventArgs>(this.ColorFrameReady));
+            }
+
+            // Draw imported image if no kinect is found
+            else
+            {
+                plainView = cv.getImage();
+                boxedView = new Bitmap(plainView);
+                drawRectangles();
+                mainDisplay.Image = boxedView;
+            }
+            frame_count = 0;
+        }
+
         public void ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
         {
             frame_count++;
@@ -80,31 +107,6 @@ namespace gui
 
             bitmapFrame.UnlockBits(bitmapData);
             return bitmapFrame;
-        }
-
-        // Initialize Computer Vision and Kinect upon Load
-        // Draw mockup GUI if no kinect is found
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            cv = new ComputerVision();
-            rectangles = cv.getBoxes();
-            this.objectDetectedLabel.Text = rectangles.Length.ToString() + " objects detected";
-
-            // Set kinect handler
-            if (cv.kinectFlag)
-            {
-                cv.set_handler(new EventHandler<ColorImageFrameReadyEventArgs>(this.ColorFrameReady));
-            }
-
-            // Draw imported image if no kinect is found
-            else
-            {
-                plainView = cv.getImage();
-                boxedView = new Bitmap(plainView);
-                drawRectangles();
-                mainDisplay.Image = boxedView;
-            }
-            frame_count = 0;
         }
 
         private void selectButton_Click(object sender, EventArgs e)
@@ -187,11 +189,6 @@ namespace gui
                 show_selected_object();
                 e.SuppressKeyPress = true;
             }
-        }
-
-        private void Form1_Shown(object sender, EventArgs e)
-        {
-            this.mainDisplay.Focus();
         }
 
         private void objectNameText_Enter(object sender, EventArgs e)
