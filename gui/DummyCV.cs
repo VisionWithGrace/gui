@@ -34,6 +34,10 @@ namespace gui
                 {
                     kinectView = new Bitmap(openFileDialog1.FileName);
                 }
+                else
+                {
+                    kinectView = new Bitmap(400, 400);
+                }   
                 kinectFlag = false;
             }
         }
