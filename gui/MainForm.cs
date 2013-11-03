@@ -23,7 +23,9 @@ namespace gui
         Pen redPen = new Pen(Color.Red, 3);
         Pen yellowPen = new Pen(Color.Yellow, 5);
 
-        bool isScanning;
+        // Scanning Interface
+        private bool isScanning;
+        private int framesPerScan = 50;
 
         public MainForm()
         {
@@ -100,13 +102,14 @@ namespace gui
                 }
             }
 
-            if (frame_count > 50)
+            if (frame_count > framesPerScan)
             {
                 selected = (selected + 1) % rectangles.Length;
                 frame_count = 0;
             }
 
-            this.labelTimeRemaining.Text = Convert.ToString(frame_count);
+            if (isScanning)
+                this.labelTimeRemaining.Text = Convert.ToString(framesPerScan - frame_count);
 
             this.mainDisplay.Image = boxedView;
         }
@@ -216,6 +219,7 @@ namespace gui
                 return;
             e.SuppressKeyPress = true;
             isScanning = false;
+            this.labelTimeRemaining.Text = "";
             show_selected_object();
         }
 
