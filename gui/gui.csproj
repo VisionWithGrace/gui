@@ -53,6 +53,7 @@
       <DependentUpon>AdminPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="DummyCV.cs" />
+    <Compile Include="DummyDB.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

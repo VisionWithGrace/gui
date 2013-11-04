@@ -20,6 +20,7 @@ namespace gui
         int selected;
         int frame_count;
         ComputerVision cv;
+        Database db;
         Pen redPen = new Pen(Color.Red, 3);
         Pen yellowPen = new Pen(Color.Yellow, 5);
 
