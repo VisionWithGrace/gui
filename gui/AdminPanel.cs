@@ -58,5 +58,17 @@ namespace gui
                 e.SuppressKeyPress = true;
             }
         }
+
+        private void buttonAddTag_Click(object sender, EventArgs e)
+        {
+            this.listBoxTags.Items.Add(this.textBoxTag.Text);
+            this.textBoxTag.Text = "";
+        }
+
+        private void buttonRemoveTag_Click(object sender, EventArgs e)
+        {
+            if (this.listBoxTags.SelectedIndex != -1)
+                this.listBoxTags.Items.RemoveAt(this.listBoxTags.SelectedIndex);
+        }
     }
 }

@@ -36,6 +36,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxTag = new System.Windows.Forms.TextBox();
             this.listBoxTags = new System.Windows.Forms.ListBox();
+            this.buttonAddTag = new System.Windows.Forms.Button();
+            this.buttonRemoveTag = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBoxObjects
@@ -119,11 +121,33 @@
             this.listBoxTags.Size = new System.Drawing.Size(202, 108);
             this.listBoxTags.TabIndex = 7;
             // 
+            // buttonAddTag
+            // 
+            this.buttonAddTag.Location = new System.Drawing.Point(351, 65);
+            this.buttonAddTag.Name = "buttonAddTag";
+            this.buttonAddTag.Size = new System.Drawing.Size(18, 23);
+            this.buttonAddTag.TabIndex = 8;
+            this.buttonAddTag.Text = "+";
+            this.buttonAddTag.UseVisualStyleBackColor = true;
+            this.buttonAddTag.Click += new System.EventHandler(this.buttonAddTag_Click);
+            // 
+            // buttonRemoveTag
+            // 
+            this.buttonRemoveTag.Location = new System.Drawing.Point(351, 94);
+            this.buttonRemoveTag.Name = "buttonRemoveTag";
+            this.buttonRemoveTag.Size = new System.Drawing.Size(18, 23);
+            this.buttonRemoveTag.TabIndex = 9;
+            this.buttonRemoveTag.Text = "-";
+            this.buttonRemoveTag.UseVisualStyleBackColor = true;
+            this.buttonRemoveTag.Click += new System.EventHandler(this.buttonRemoveTag_Click);
+            // 
             // AdminPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(589, 378);
+            this.Controls.Add(this.buttonRemoveTag);
+            this.Controls.Add(this.buttonAddTag);
             this.Controls.Add(this.listBoxTags);
             this.Controls.Add(this.textBoxTag);
             this.Controls.Add(this.label2);
@@ -149,6 +173,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxTag;
         private System.Windows.Forms.ListBox listBoxTags;
+        private System.Windows.Forms.Button buttonAddTag;
+        private System.Windows.Forms.Button buttonRemoveTag;
 
 
     }
