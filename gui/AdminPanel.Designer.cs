@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.listBoxObjects = new System.Windows.Forms.ListBox();
             this.recentObjectsButton = new System.Windows.Forms.Button();
             this.allObjectsButton = new System.Windows.Forms.Button();
             this.textBoxName = new System.Windows.Forms.TextBox();
@@ -38,24 +38,21 @@
             this.listBoxTags = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
-            // listBox1
+            // listBoxObjects
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9"});
-            this.listBox1.Location = new System.Drawing.Point(12, 12);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(316, 290);
-            this.listBox1.TabIndex = 0;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            this.listBoxObjects.FormattingEnabled = true;
+            this.listBoxObjects.Items.AddRange(new object[] {
+            "Book",
+            "Table",
+            "Backpack",
+            "Ball",
+            "Dinosaur",
+            "Mom"});
+            this.listBoxObjects.Location = new System.Drawing.Point(12, 12);
+            this.listBoxObjects.Name = "listBoxObjects";
+            this.listBoxObjects.Size = new System.Drawing.Size(316, 290);
+            this.listBoxObjects.TabIndex = 0;
+            this.listBoxObjects.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // recentObjectsButton
             // 
@@ -115,6 +112,8 @@
             // listBoxTags
             // 
             this.listBoxTags.FormattingEnabled = true;
+            this.listBoxTags.Items.AddRange(new object[] {
+            ""});
             this.listBoxTags.Location = new System.Drawing.Point(375, 65);
             this.listBoxTags.Name = "listBoxTags";
             this.listBoxTags.Size = new System.Drawing.Size(202, 108);
@@ -132,7 +131,7 @@
             this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.allObjectsButton);
             this.Controls.Add(this.recentObjectsButton);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.listBoxObjects);
             this.Name = "AdminPanel";
             this.Text = "Form2";
             this.ResumeLayout(false);
@@ -142,7 +141,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox listBoxObjects;
         private System.Windows.Forms.Button recentObjectsButton;
         private System.Windows.Forms.Button allObjectsButton;
         private System.Windows.Forms.TextBox textBoxName;
